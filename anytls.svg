@@ -1,0 +1,35 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://w3.org">
+  <!-- 渐变定义：体现安全与科技的蓝紫色调 -->
+  <defs>
+    <linearGradient id="anytls_gradient" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D2FF"/> <!-- 青蓝色 -->
+      <stop offset="1" stop-color="#9D50BB"/> <!-- 科技紫 -->
+    </linearGradient>
+  </defs>
+
+  <!-- "Any" 部分：采用坚固、现代的无衬线字体风格 -->
+  <g fill="url(#anytls_gradient)">
+    <path d="M40 85L55 45H68L83 85H71L68 76H55L52 85H40ZM58 68H65L61.5 58L58 68Z"/>
+    <path d="M90 55H101V60C103 56 107 54 111 54C118 54 122 58 122 66V85H111V67C111 63 109 61 106 61C103 61 101 63 101 67V85H90V55Z"/>
+    <path d="M130 55L142 78L154 55H166L148 88L148 100H137L137 88L118 55H130Z"/>
+  </g>
+
+  <!-- "TLS" 部分：融入“填充块”设计，象征数据包分段 -->
+  <g fill="url(#anytls_gradient)">
+    <!-- T 的横梁由两个不同长度的方块组成，模拟数据包填充 -->
+    <rect x="175" y="45" width="22" height="6" rx="1"/>
+    <rect x="199" y="45" width="12" height="6" rx="1"/>
+    <rect x="187" y="53" width="10" height="32" rx="1"/>
+
+    <!-- L 由长短结合的直线组成 -->
+    <rect x="215" y="45" width="10" height="40" rx="1"/>
+    <rect x="227" y="79" width="20" height="6" rx="1"/>
+
+    <!-- S 采用分段式曲线，象征非连续特征 -->
+    <path d="M255 78C255 82 258 85 264 85C270 85 273 82 273 79C273 76 271 74 266 73L261 72C256 71 253 68 253 63C253 58 257 54 264 54C271 54 275 57 275 62H265C265 59 263 58 261 58C258 58 256 59 256 62C256 64 258 66 262 67L267 68C272 69 276 72 276 78C276 83 272 88 264 88C256 88 252 83 252 78H255Z"/>
+  </g>
+
+  <!-- 下方修饰线条：象征数据流流向 -->
+  <rect x="40" y="105" width="180" height="2" rx="1" fill="url(#anytls_gradient)" opacity="0.3"/>
+  <rect x="230" y="105" width="40" height="2" rx="1" fill="url(#anytls_gradient)" opacity="0.6"/>
+</svg>
