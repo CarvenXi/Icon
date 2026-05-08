@@ -1,0 +1,4516 @@
+{
+  "log": {
+    "level": "error",
+    "timestamp": true,
+    "output": "/data/adb/box/run/sing-box.log"
+  },
+  "dns": {
+    "servers": [
+      {
+        "type": "h3",
+        "tag": "dns_direct",
+        "server": "223.5.5.5",
+        "detour": "🎯 全球直连"
+      },
+      {
+        "type": "quic",
+        "tag": "dns_proxy",
+        "server": "c745e5.dns.nextdns.io",
+        "tls": {
+          "server_name": "c745e5.dns.nextdns.io"
+        },
+        "domain_resolver": "dns_direct",
+        "detour": "🎯 全球直连"
+      },
+      {
+        "type": "fakeip",
+        "tag": "dns_fakeip",
+        "inet4_range": "198.18.0.0/15",
+        "inet6_range": "fc00::/18"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "geosite-category-ads-all",
+          "anti-AD"
+        ],
+        "action": "predefined",
+        "rcode": "REFUSED"
+      },
+      {
+        "domain": [
+          "encryptedsni.com",
+          "cloudflare-ech.com"
+        ],
+        "rule_set": [
+          "geosite-googlefcm",
+          "geosite-private",
+          "geosite-cn"
+        ],
+        "timeout": "400ms",
+        "server": "dns_direct"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "rule_set": [
+          "geosite-telegram",
+          "geosite-google",
+          "geosite-github",
+          "geosite-spotify",
+          "geosite-youtube",
+          "ai",
+          "tld-proxy",
+          "gfw",
+          "proxy",
+          "geosite-geolocation-!cn"
+        ],
+        "server": "dns_fakeip"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "action": "evaluate",
+        "server": "dns_proxy"
+      },
+      {
+        "rule_set": [
+          "geoip-cn"
+        ],
+        "match_response": true,
+        "action": "respond"
+      },
+      {
+        "match_response": true,
+        "server": "dns_fakeip"
+      },
+      {
+        "server": "dns_proxy"
+      }
+    ],
+    "strategy": "prefer_ipv4",
+    "final": "dns_direct"
+  },
+  "inbounds": [
+    {
+      "type": "tproxy",
+      "tag": "tproxy-in",
+      "listen": "::",
+      "listen_port": 9898,
+      "network": [
+        "udp",
+        "tcp"
+      ],
+      "tcp_fast_open": true,
+      "udp_fragment": true,
+      "reuse_addr": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "🚀 节点选择",
+      "outbounds": [
+        "♻️ 自动选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "ℹ️ Ikuuu",
+        "🇭🇰 LSS1-HK",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点",
+        "🇯🇵 日本节点",
+        "DIRECT"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "♻️ 自动选择",
+      "outbounds": [
+        "⛅ CF-Pages",
+        "💠 Reality",
+        "☄️ Hysteria2",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "🇭🇰 LSS1-HK",
+        "®️ Rongseven"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "2m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "selector",
+      "tag": "🔘 手动切换",
+      "outbounds": [
+        "💠 Reality",
+        "☄️ Hysteria2",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "🇭🇰 LSS1-HK",
+        "cf.090227",
+        "🇺🇸 SSTP-US",
+        "🇨🇳 SSTP-TW",
+        "🇯🇵 SSTP-JP1",
+        "cf.130519.xyz",
+        "🇻🇳 SSTP-VN",
+        "🇮🇩 SSTP-ID",
+        "🇯🇵 SSTP-JP",
+        "🇰🇷 SSTP-KR",
+        "🇹🇭 SSTP-TH",
+        "L🍆1",
+        "L🍆2",
+        "L🍆3",
+        "L🌲7",
+        "L🌲8",
+        "L🌲9",
+        "L🌲10",
+        "L🌲11",
+        "🇺🇸 US-LUO✈️1",
+        "🇺🇸 US-LUO✈️2",
+        "🇸🇬 SG-LUO✈️1",
+        "🇯🇵 JP-LUO✈️1",
+        "🇯🇵 JP-LUO✈️2"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "🎯 全球直连",
+      "outbounds": [
+        "DIRECT",
+        "🚀 节点选择",
+        "♻️ 自动选择"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "✳️ Google",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "🇭🇰 LSS1-HK",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "selector",
+      "tag": "✖️ X-Twitter",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "🇭🇰 LSS1-HK",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "direct",
+      "tag": "🔥 FCM",
+      "tcp_fast_open": true,
+      "udp_fragment": true,
+      "tcp_keep_alive": "35s",
+      "tcp_keep_alive_interval": "15s"
+    },
+    {
+      "type": "selector",
+      "tag": "📺 YouTube",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "🇭🇰 LSS1-HK",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "selector",
+      "tag": "✈️ Telegram",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "🇭🇰 LSS1-HK",
+        "⛅ CF-Pages",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "selector",
+      "tag": "🤖 Gemini",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "🇭🇰 LSS1-HK",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "selector",
+      "tag": "💡AI",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "🇭🇰 LSS1-HK",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "selector",
+      "tag": "🎵 Spotify",
+      "outbounds": [
+        "🚀 节点选择",
+        "🔘 手动切换",
+        "💠 Reality",
+        "⛅ CF-Pages",
+        "🇭🇰 LSS1-HK",
+        "ℹ️ Ikuuu",
+        "🌲 VKME",
+        "🌠 CCCD",
+        "🚩 原生IP",
+        "☄️ Hysteria2",
+        "®️ Rongseven",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🚀 节点选择"
+    },
+    {
+      "type": "urltest",
+      "tag": "🌠 CCCD",
+      "outbounds": [
+        "L🍆1",
+        "L🍆2",
+        "L🍆3",
+        "L🌲7",
+        "L🌲8",
+        "L🌲9",
+        "L🌲10",
+        "L🌲11",
+        "CF移动优选",
+        "CF移动优选 2",
+        "CF移动优选 3",
+        "CF移动优选 4",
+        "CF移动优选 5",
+        "CF移动优选 6",
+        "CF移动优选 7",
+        "CF移动优选 8",
+        "CF移动优选 9",
+        "CF移动优选 10",
+        "CF移动优选 11",
+        "CF移动优选 12",
+        "CF移动优选 13",
+        "CF移动优选 14",
+        "CF移动优选 15",
+        "CF移动优选 16"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "🌲 VKME",
+      "outbounds": [
+        "🇭🇰 HK",
+        "🇸🇬 SG",
+        "🇯🇵 JP⚡1",
+        "🇯🇵 JP⚡2",
+        "🇯🇵 JP⚡3",
+        "🇳🇱 NL⚡1",
+        "🇸🇬 SG⚡1",
+        "🇸🇬 SG⚡2",
+        "🇸🇬 SG⚡3",
+        "🇸🇬 SG⚡4",
+        "🇸🇬 SG⚡5",
+        "🇸🇬 SG⚡6",
+        "🇸🇬 SG⚡7",
+        "🇺🇸 US⚡1",
+        "🇺🇸 US⚡2",
+        "🇺🇸 US⚡3",
+        "🇺🇸 US⚡4",
+        "🇺🇸 US⚡5",
+        "🇺🇸 US⚡6",
+        "🇺🇸 US⚡7",
+        "🇺🇸 US⚡8",
+        "🇺🇸 US⚡9",
+        "🇺🇸 US⚡10",
+        "🇺🇸 US⚡11",
+        "🇺🇸 US⚡12",
+        "🇩🇪 DE⚡1",
+        "🇩🇪 DE⚡2",
+        "🇩🇪 DE⚡3",
+        "🇩🇪 DE⚡4",
+        "🇩🇪 DE⚡5",
+        "🇩🇪 DE⚡6",
+        "🇩🇪 DE⚡7",
+        "🇩🇪 DE⚡8",
+        "🇩🇪 DE⚡9",
+        "🇩🇪 DE⚡10",
+        "🇸🇬 SG1",
+        "🇸🇬 SG2",
+        "🇸🇬 SG3",
+        "🇸🇬 SG4",
+        "🇸🇬 SG5"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "🚩 原生IP",
+      "outbounds": [
+        "cf.090227",
+        "🇺🇸 SSTP-US",
+        "🇨🇳 SSTP-TW",
+        "🇯🇵 SSTP-JP1",
+        "cf.130519.xyz",
+        "🇻🇳 SSTP-VN",
+        "🇮🇩 SSTP-ID",
+        "🇯🇵 SSTP-JP",
+        "🇰🇷 SSTP-KR",
+        "🇹🇭 SSTP-TH"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "®️ Rongseven",
+      "outbounds": [
+        "🇦🇪~AY~AEˣ⁰˙⁰¹",
+        "🇰🇷~AY~KRˣ⁰˙⁰¹",
+        "🇮🇳~AY~INˣ⁰˙⁰¹",
+        "🇳🇱~AY~NLˣ⁰˙⁰¹",
+        "🇭🇰~AY-HKˣ⁰˙¹",
+        "🇹🇷~TY~TRˣ⁰˙⁰¹",
+        "🇹🇼~HY~TWˣ⁰˙¹",
+        "🇸🇬~CF~SGˣ⁰˙⁰¹"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "ℹ️ Ikuuu",
+      "outbounds": [
+        "🇯🇵 免费-日本1-Ver.7",
+        "🇯🇵 免费-日本2-Ver.8",
+        "🇯🇵 免费-日本3-Ver.7",
+        "🇯🇵 免费-日本4-Ver.8",
+        "🇯🇵 免费-日本5-Ver.9",
+        "🇯🇵 免费-日本6-Ver.8",
+        "🇯🇵 免费-日本7-Ver.2"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "💠 Reality",
+      "outbounds": [
+        "A - 🇭🇰 HK 01 -PAI",
+        "A - 🇭🇰 HK 08 -PAI",
+        "A - 🇭🇰 HK 09 -PAI",
+        "A - 🇭🇰 HK 11 -PAI",
+        "B - 🇭🇰 HK 16 -PAI"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "selector",
+      "tag": "☄️ Hysteria2",
+      "outbounds": [
+        "A - 🇯🇵 JP 01 -PAI",
+        "C - 🇩🇪 Germany 29 -PAI"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "🇭🇰 LSS1-HK",
+      "outbounds": [
+        "🇭🇰 HK|1",
+        "🇭🇰 HK|2",
+        "🇭🇰 HK|3",
+        "🇭🇰 HK|4",
+        "🇭🇰 HK|5",
+        "🇭🇰 HK|6",
+        "🇭🇰 HK|7",
+        "🇭🇰 HK|8",
+        "🇭🇰 HK|9",
+        "🇭🇰 HK|10"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "3m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "⛅ CF-Pages",
+      "outbounds": [
+        "🌠 CCCD",
+        "🌲 VKME",
+        "🚩 原生IP",
+        "🇺🇸 US-LUO✈️1",
+        "🇺🇸 US-LUO✈️2",
+        "🇸🇬 SG-LUO✈️1",
+        "🇯🇵 JP-LUO✈️1",
+        "🇯🇵 JP-LUO✈️2",
+        "🇯🇵 JP-LUO✈️3",
+        "🇯🇵 JP-LUO✈️4",
+        "🇯🇵 JP-LUO✈️5",
+        "🇯🇵 JP-LUO✈️6",
+        "🇯🇵 JP-LUO✈️7",
+        "🇯🇵 JP-LUO✈️8",
+        "🇯🇵 JP-LUO✈️9",
+        "🇯🇵 JP-LUO✈️10",
+        "🇺🇸 US-LUO✈️3",
+        "🇺🇸 US-LUO✈️4",
+        "🇺🇸 US-LUO✈️5",
+        "🇸🇬 SG|官方优选|171ms",
+        "🇸🇬 SG|官方优选|178ms",
+        "🇸🇬 SG|官方优选|180ms",
+        "🇸🇬 SG|官方优选|185ms",
+        "🇸🇬 SG|官方优选|190ms",
+        "🇸🇬 SG|官方优选|195ms",
+        "🇸🇬 SG|官方优选|197ms",
+        "🇸🇬 SG|官方优选|200ms",
+        "🇸🇬 SG|官方优选|206ms",
+        "🇸🇬 SG|官方优选|211ms",
+        "🇸🇬 SG|官方优选|212ms",
+        "🇸🇬 SG|官方优选|220ms",
+        "🇸🇬 SG|官方优选|223ms",
+        "🇸🇬 SG|官方优选|224ms",
+        "🇸🇬 SG|官方优选|224ms 2",
+        "🇸🇬 SG|官方优选|226ms"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "selector",
+      "tag": "🍎 Apple",
+      "outbounds": [
+        "🎯 全球直连",
+        "🚀 节点选择",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🎯 全球直连"
+    },
+    {
+      "type": "selector",
+      "tag": "🪟 Microsoft",
+      "outbounds": [
+        "🎯 全球直连",
+        "🚀 节点选择",
+        "🇭🇰 香港节点",
+        "🇯🇵 日本节点",
+        "🇸🇬 新加坡节点",
+        "🇺🇲 美国节点"
+      ],
+      "default": "🎯 全球直连"
+    },
+    {
+      "type": "selector",
+      "tag": "🐟 漏网之鱼",
+      "outbounds": [
+        "🚀 节点选择",
+        "🎯 全球直连",
+        "♻️ 自动选择"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "🇭🇰 香港节点",
+      "outbounds": [
+        "🇭🇰 HK|1",
+        "🇭🇰 HK|2",
+        "🇭🇰 HK|3",
+        "🇭🇰 HK|4",
+        "🇭🇰 HK|5",
+        "🇭🇰 HK|6",
+        "🇭🇰 HK|7",
+        "🇭🇰 HK|8",
+        "🇭🇰 HK|9",
+        "🇭🇰 HK|10",
+        "🇭🇰 HK"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "🇯🇵 日本节点",
+      "outbounds": [
+        "🇯🇵 JP⚡1",
+        "🇯🇵 JP⚡2",
+        "🇯🇵 JP⚡3",
+        "🇯🇵 JP-LUO✈️1",
+        "🇯🇵 JP-LUO✈️2",
+        "🇯🇵 JP-LUO✈️3",
+        "🇯🇵 JP-LUO✈️4",
+        "🇯🇵 JP-LUO✈️5",
+        "🇯🇵 JP-LUO✈️6",
+        "🇯🇵 JP-LUO✈️7",
+        "🇯🇵 JP-LUO✈️8",
+        "🇯🇵 JP-LUO✈️9",
+        "🇯🇵 JP-LUO✈️10"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "🇸🇬 新加坡节点",
+      "outbounds": [
+        "🇸🇬 SG-LUO✈️1",
+        "🇸🇬 SG|官方优选|171ms",
+        "🇸🇬 SG|官方优选|178ms",
+        "🇸🇬 SG|官方优选|180ms",
+        "🇸🇬 SG|官方优选|185ms",
+        "🇸🇬 SG|官方优选|190ms",
+        "🇸🇬 SG|官方优选|195ms",
+        "🇸🇬 SG|官方优选|197ms",
+        "🇸🇬 SG|官方优选|200ms",
+        "🇸🇬 SG|官方优选|206ms",
+        "🇸🇬 SG|官方优选|211ms",
+        "🇸🇬 SG|官方优选|212ms",
+        "🇸🇬 SG|官方优选|220ms",
+        "🇸🇬 SG|官方优选|223ms",
+        "🇸🇬 SG|官方优选|224ms",
+        "🇸🇬 SG|官方优选|224ms 2",
+        "🇸🇬 SG|官方优选|226ms",
+        "🇸🇬 SG⚡1",
+        "🇸🇬 SG⚡2",
+        "🇸🇬 SG⚡3",
+        "🇸🇬 SG⚡4",
+        "🇸🇬 SG⚡5",
+        "🇸🇬 SG⚡6",
+        "🇸🇬 SG⚡7"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "5m0s",
+      "tolerance": 50
+    },
+    {
+      "type": "urltest",
+      "tag": "🇺🇲 美国节点",
+      "outbounds": [
+        "🇺🇸 US-LUO✈️1",
+        "🇺🇸 US-LUO✈️2",
+        "🇺🇸 US-LUO✈️3",
+        "🇺🇸 US-LUO✈️4",
+        "🇺🇸 US-LUO✈️5",
+        "🇺🇸 US⚡1",
+        "🇺🇸 US⚡2",
+        "🇺🇸 US⚡3",
+        "🇺🇸 US⚡4",
+        "🇺🇸 US⚡5",
+        "🇺🇸 US⚡6",
+        "🇺🇸 US⚡7",
+        "🇺🇸 US⚡8",
+        "🇺🇸 US⚡9",
+        "🇺🇸 US⚡10",
+        "🇺🇸 US⚡11",
+        "🇺🇸 US⚡12"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "outbounds": [
+        "DIRECT",
+        "🚀 节点选择",
+        "♻️ 自动选择"
+      ]
+    },
+    {
+      "type": "direct",
+      "tag": "DIRECT"
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|1",
+      "server": "172.64.146.244",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "grpc.lss1.ccwu.cc"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "grpc.lss1.ccwu.cc",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|2",
+      "server": "172.64.146.10",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo1.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo1.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|3",
+      "server": "172.64.146.64",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "grpc.lss1.ccwu.cc"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "grpc.lss1.ccwu.cc",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|4",
+      "server": "172.64.146.29",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo1.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo1.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|5",
+      "server": "104.18.38.254",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "grpc.lss1.ccwu.cc"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "grpc.lss1.ccwu.cc",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|6",
+      "server": "104.19.47.112",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo1.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo1.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|7",
+      "server": "104.19.40.97",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "grpc.lss1.ccwu.cc"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "grpc.lss1.ccwu.cc",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|8",
+      "server": "104.19.41.97",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo1.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo1.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|9",
+      "server": "104.19.58.183",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "grpc.lss1.ccwu.cc"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "grpc.lss1.ccwu.cc",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK|10",
+      "server": "104.19.58.239",
+      "server_port": 8443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/socks5=9:9@47.243.55.157:1080?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo1.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo1.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本1-Ver.7",
+      "server": "78b7x6d-g03.jp01-nn-vm0.entry.fr0528.art",
+      "server_port": 21583,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1,
+      "tls": {
+        "enabled": true
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本2-Ver.8",
+      "server": "7tr7s8f-g03.jp02-e3-vm0.entry.fr0528.art",
+      "server_port": 11775,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本3-Ver.7",
+      "server": "stbus8f-g03.jp03-j7-vm0.entry.fr0528.art",
+      "server_port": 21583,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1,
+      "tls": {
+        "enabled": true
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本4-Ver.8",
+      "server": "7el0s6d-g03.jp04-1d-vm0.entry.fr0528.art",
+      "server_port": 446,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本5-Ver.9",
+      "server": "18b7x6b-g03.jp05-h6-vm0.entry.fr0528.art",
+      "server_port": 46484,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本6-Ver.8",
+      "server": "nml7o3b-g03.jp06-jz-vm0.entry.fr0528.art",
+      "server_port": 28785,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1,
+      "tls": {
+        "enabled": true
+      }
+    },
+    {
+      "type": "vmess",
+      "tag": "🇯🇵 免费-日本7-Ver.2",
+      "server": "78l0s3f-g03.jp07-sh-vm0.entry.fr0528.art",
+      "server_port": 28785,
+      "uuid": "8cdc93a2-be57-32d7-939c-305d5059f1e8",
+      "security": "auto",
+      "alter_id": 1
+    },
+    {
+      "tag": "🇦🇪~AY~AEˣ⁰˙⁰¹",
+      "type": "anytls",
+      "server": "193.123.82.66",
+      "server_port": 1443,
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "tls": {
+        "enabled": true,
+        "server_name": "node.now.cc",
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇰🇷~AY~KRˣ⁰˙⁰¹",
+      "type": "anytls",
+      "server": "150.230.251.78",
+      "server_port": 3443,
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "tls": {
+        "enabled": true,
+        "server_name": "anycast.de5.net",
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇮🇳~AY~INˣ⁰˙⁰¹",
+      "type": "anytls",
+      "server": "152.67.162.57",
+      "server_port": 1443,
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "tls": {
+        "enabled": true,
+        "server_name": "anycast.cloudflare.net",
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇳🇱~AY~NLˣ⁰˙⁰¹",
+      "type": "anytls",
+      "server": "158.101.206.223",
+      "server_port": 1443,
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "tls": {
+        "enabled": true,
+        "server_name": "anycast.cloudflare.com",
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇭🇰~AY-HKˣ⁰˙¹",
+      "type": "anytls",
+      "server": "45.196.236.233",
+      "server_port": 3443,
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "tls": {
+        "enabled": true,
+        "server_name": "anycast.cloudinnovation.org",
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇹🇷~TY~TRˣ⁰˙⁰¹",
+      "type": "tuic",
+      "server": "107.161.174.112",
+      "server_port": 20345,
+      "uuid": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "congestion_control": "bbr",
+      "tls": {
+        "enabled": true,
+        "server_name": "anycast.c01.kr",
+        "alpn": [
+          "h3"
+        ],
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇹🇼~HY~TWˣ⁰˙¹",
+      "type": "hysteria2",
+      "server": "tw.node.now.cc",
+      "server_port": 21419,
+      "password": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "up_mbps": 500,
+      "down_mbps": 1000,
+      "tls": {
+        "enabled": true,
+        "server_name": "anycast.us.kg",
+        "insecure": true
+      }
+    },
+    {
+      "tag": "🇸🇬~CF~SGˣ⁰˙⁰¹",
+      "type": "vmess",
+      "server": "114.32.9.249",
+      "server_port": 16443,
+      "uuid": "f162c43f-92e8-4abd-b11b-d47e7b592ad3",
+      "security": "auto",
+      "transport": {
+        "type": "grpc",
+        "service_name": "yydsca"
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "yyds.cfgrpc.ggff.net",
+        "insecure": true
+      }
+    },
+    {
+      "type": "hysteria",
+      "tag": "C - 🇩🇪 Germany 29 -PAI",
+      "server": "5.83.129.90",
+      "server_port": 54177,
+      "up_mbps": 500,
+      "down_mbps": 1000,
+      "auth_str": "dongtaiwang.com",
+      "tls": {
+        "enabled": true,
+        "server_name": "apple.com",
+        "insecure": true,
+        "alpn": "h3"
+      }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "A - 🇯🇵 JP 01 -PAI",
+      "server": "vpn-jp-003.fastervpn.world",
+      "server_port": 443,
+      "password": "qQe1z5kU8kN6SlKnDt9Ru3Qp",
+      "tls": {
+        "enabled": true,
+        "server_name": "jd.com",
+        "insecure": true
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "A - 🇭🇰 HK 01 -PAI",
+      "server": "8.218.117.76",
+      "server_port": 443,
+      "uuid": "3e7f67de-648e-4871-b51a-a225214d41ee",
+      "packet_encoding": "xudp",
+      "tls": {
+        "enabled": true,
+        "server_name": "prod.adobeccstatic.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "TRP10HqKUXEQ3O-cfsq93DycfBmbJe9KM36yvSa8Mmw"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "A - 🇭🇰 HK 08 -PAI",
+      "server": "8.217.78.216",
+      "server_port": 443,
+      "uuid": "3e7f67de-648e-4871-b51a-a225214d41ee",
+      "packet_encoding": "xudp",
+      "tls": {
+        "enabled": true,
+        "server_name": "dsum-sec.casalemedia.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "TRP10HqKUXEQ3O-cfsq93DycfBmbJe9KM36yvSa8Mmw"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "A - 🇭🇰 HK 09 -PAI",
+      "server": "8.218.119.79",
+      "server_port": 443,
+      "uuid": "3e7f67de-648e-4871-b51a-a225214d41ee",
+      "packet_encoding": "xudp",
+      "tls": {
+        "enabled": true,
+        "server_name": "assets.adobedtm.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "TRP10HqKUXEQ3O-cfsq93DycfBmbJe9KM36yvSa8Mmw"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "A - 🇭🇰 HK 11 -PAI",
+      "server": "8.218.127.66",
+      "server_port": 443,
+      "uuid": "3e7f67de-648e-4871-b51a-a225214d41ee",
+      "tls": {
+        "enabled": true,
+        "server_name": "cdn.userway.org",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "TRP10HqKUXEQ3O-cfsq93DycfBmbJe9KM36yvSa8Mmw"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "B - 🇭🇰 HK 16 -PAI",
+      "server": "8.218.114.239",
+      "server_port": 443,
+      "uuid": "3e7f67de-648e-4871-b51a-a225214d41ee",
+      "packet_encoding": "xudp",
+      "tls": {
+        "enabled": true,
+        "server_name": "bh.contextweb.com",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "TRP10HqKUXEQ3O-cfsq93DycfBmbJe9KM36yvSa8Mmw"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🍆1",
+      "server": "cf.cnae.top",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/message/clip/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🍆2",
+      "server": "www.csgo.com",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/go/type/book/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🍆3",
+      "server": "ip.sb",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/products/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🌲7",
+      "server": "store.ubi.com",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/urls/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🌲8",
+      "server": "cf.130519.xyz",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/group/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🌲9",
+      "server": "cf.008500.xyz",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/go.php/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🌲10",
+      "server": "cf.090227.xyz",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/setting/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "L🌲11",
+      "server": "cf.877774.xyz",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/view/intro/detail/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选",
+      "server": "104.19.49.27",
+      "server_port": 2096,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/season/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 2",
+      "server": "104.19.56.213",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/home/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 3",
+      "server": "162.159.153.59",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/service/edu/document/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 4",
+      "server": "162.159.152.127",
+      "server_port": 2087,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/users/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 5",
+      "server": "162.159.152.101",
+      "server_port": 2087,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/view/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 6",
+      "server": "162.159.152.63",
+      "server_port": 2053,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/reg/torrent/series/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 7",
+      "server": "162.159.153.60",
+      "server_port": 8443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/account/ad/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 8",
+      "server": "162.159.153.36",
+      "server_port": 8443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ranking/en/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 9",
+      "server": "104.19.45.90",
+      "server_port": 8443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/discount/mall/about/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 10",
+      "server": "162.159.153.21",
+      "server_port": 8443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/manhua/company/lang/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 11",
+      "server": "104.19.52.29",
+      "server_port": 2087,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/info/blogs/index/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 12",
+      "server": "104.19.50.123",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/htm/photos/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 13",
+      "server": "104.19.49.74",
+      "server_port": 2053,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/section/films/bd/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 14",
+      "server": "162.159.153.225",
+      "server_port": 8443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/community/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 15",
+      "server": "104.19.57.236",
+      "server_port": 2087,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/edu/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "CF移动优选 16",
+      "server": "162.159.153.39",
+      "server_port": 2087,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/lib/novels/f/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|171ms",
+      "server": "172.64.228.63",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/book/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|178ms",
+      "server": "108.162.198.70",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/task/bt/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|180ms",
+      "server": "8.35.211.212",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/show/player/programs/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|185ms",
+      "server": "173.245.58.117",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/pdf/task/playlist/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|190ms",
+      "server": "104.19.46.68",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/playlist/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|195ms",
+      "server": "162.159.152.205",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/comic/f/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|197ms",
+      "server": "8.39.125.65",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/question/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|200ms",
+      "server": "172.64.146.185",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/edu/tool/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|206ms",
+      "server": "162.159.43.28",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/qa/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|211ms",
+      "server": "8.35.211.241",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ad/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|212ms",
+      "server": "172.64.146.105",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/channels/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|220ms",
+      "server": "172.64.147.195",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/live/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|223ms",
+      "server": "172.67.73.154",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/archive/users/account/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|224ms",
+      "server": "108.162.198.223",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/ad/new/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|224ms 2",
+      "server": "104.19.59.43",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/zh-cn/out.html/series/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG|官方优选|226ms",
+      "server": "8.35.211.83",
+      "server_port": 443,
+      "uuid": "72848367-13fe-498c-9cb2-27951b844062",
+      "tls": {
+        "enabled": true,
+        "server_name": "l.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/playlist/class/comics/proxyip=ProxyIP.HK.CMLiussss.net?ed=2560",
+        "headers": {
+          "Host": "l.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇭🇰 HK",
+      "server": "104.19.43.26",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/streams/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG",
+      "server": "172.64.146.185",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/type/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP⚡1",
+      "server": "162.159.44.214",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/upload/tool/tags/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP⚡2",
+      "server": "108.162.198.55",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/jump/bt/albums/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP⚡3",
+      "server": "162.159.39.223",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/comics/series/download/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇳🇱 NL⚡1",
+      "server": "172.67.187.219",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/redirect.php/faq/team/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡1",
+      "server": "104.18.39.145",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/m/episode/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡2",
+      "server": "172.64.145.202",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/student/about/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡3",
+      "server": "104.18.42.54",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/events/faq/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡4",
+      "server": "172.64.145.93",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sale/mall/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡5",
+      "server": "104.18.42.163",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/community/game/categories/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡6",
+      "server": "104.18.42.98",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/city/account/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG⚡7",
+      "server": "172.64.145.158",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/messages/collect/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡1",
+      "server": "104.19.47.48",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/index/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡2",
+      "server": "104.18.255.252",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/library/drama/go/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡3",
+      "server": "104.19.173.68",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/tool/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡4",
+      "server": "104.16.148.244",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/photos/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡5",
+      "server": "104.18.15.19",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/shop/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡6",
+      "server": "195.85.59.95",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/channels/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡7",
+      "server": "104.16.229.229",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/details/faq/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡8",
+      "server": "104.16.144.63",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/doujin/setting/playlist/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡9",
+      "server": "104.16.25.46",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/upload/lang/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡10",
+      "server": "104.16.142.237",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/game/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡11",
+      "server": "104.16.240.120",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/episodes/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US⚡12",
+      "server": "104.18.7.67",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/avatar/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡1",
+      "server": "104.26.7.37",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/files/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡2",
+      "server": "104.18.23.235",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/blog/library/playlist/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡3",
+      "server": "172.67.74.151",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/redirect/data/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡4",
+      "server": "172.67.75.194",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/image/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡5",
+      "server": "104.18.26.94",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/drama/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡6",
+      "server": "104.26.5.60",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/library/stock/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡7",
+      "server": "172.67.70.92",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/city/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡8",
+      "server": "104.26.13.140",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/ajax/soft/student/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡9",
+      "server": "104.26.3.223",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/document/about/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇩🇪 DE⚡10",
+      "server": "104.26.6.37",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/task/upload/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG1",
+      "server": "172.64.68.148",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/tools/u/images/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG2",
+      "server": "198.41.196.227",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/act/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG3",
+      "server": "108.162.194.113",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/archives/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG4",
+      "server": "103.31.4.168",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/link/test/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "vkme.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "vkme.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG5",
+      "server": "188.114.98.45",
+      "server_port": 443,
+      "uuid": "c736f2bd-930c-47ee-8949-73b6396573e8",
+      "transport": {
+        "path": "/section/proxyip=proxyip.SG.cmliussss.net?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "v.luo.cc.cd"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "v.luo.cc.cd",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US-LUO✈️1",
+      "server": "104.16.191.82",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/proxyip=proxyip.HK.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US-LUO✈️2",
+      "server": "104.16.244.9",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/proxyip=proxyip.HK.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇸🇬 SG-LUO✈️1",
+      "server": "104.18.39.145",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/proxyip=proxyip.HK.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️1",
+      "server": "162.159.45.149",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn627403133.opengw.net:1574?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️2",
+      "server": "108.162.198.154",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn583764032.opengw.net:1464?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️3",
+      "server": "162.159.44.192",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn401673898.opengw.net:1412?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️4",
+      "server": "194.36.55.26",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn993894201.opengw.net:1651?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️5",
+      "server": "27.50.49.70",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn358380061.opengw.net:1244?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️6",
+      "server": "45.80.110.149",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=n26.opengw.net:1194?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️7",
+      "server": "185.176.24.245",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn242061895.opengw.net:1429?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️8",
+      "server": "154.197.64.59",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn242061895.opengw.net:1429?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️9",
+      "server": "154.197.108.12",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn242061895.opengw.net:1429?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 JP-LUO✈️10",
+      "server": "188.42.145.102",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/sstp=vpn242061895.opengw.net:1429?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US-LUO✈️3",
+      "server": "103.31.4.107",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/proxyip=proxyip.HK.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US-LUO✈️4",
+      "server": "104.17.169.120",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "c.luo.cloudns.be",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/proxyip=proxyip.HK.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "c.luo.cloudns.be"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 US-LUO✈️5",
+      "server": "104.18.64.80",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "tls": {
+        "enabled": true,
+        "server_name": "luos.de5.net",
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        },
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/proxyip=proxyip.HK.cmliussss.net?ed=2560",
+        "headers": {
+          "Host": "luos.de5.net"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "cf.090227",
+      "server": "youxuan.cf.090227.xyz",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp=vpn:vpn@vpn242061895.opengw.net:1429?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇺🇸 SSTP-US",
+      "server": "104.18.42.98",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn685719311.opengw.net:1703?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇨🇳 SSTP-TW",
+      "server": "172.64.146.198",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn503500791.opengw.net:1965?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 SSTP-JP1",
+      "server": "saas.sin.fan",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn242061895.opengw.net:1429?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "cf.130519.xyz",
+      "server": "cf.130519.xyz",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn627403133.opengw.net:1574?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇻🇳 SSTP-VN",
+      "server": "cf.008500.xyz",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn801552750.opengw.net:1547?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇯🇵 SSTP-JP",
+      "server": "108.162.194.113",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn583764032.opengw.net:1464?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇮🇩 SSTP-ID",
+      "server": "saas.sin.fan",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn841067207.opengw.net:995?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇰🇷 SSTP-KR",
+      "server": "8.35.211.241",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn421074651.opengw.net:995?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "🇹🇭 SSTP-TH",
+      "server": "jp.111000.cc.cd",
+      "server_port": 443,
+      "uuid": "85291745-d6e2-40e4-8165-b18636aa6e19",
+      "transport": {
+        "path": "/sstp://vpn:vpn@vpn199031972.opengw.net:1421?ed=2560",
+        "type": "ws",
+        "headers": {
+          "Host": "luo11.pages.dev"
+        }
+      },
+      "tls": {
+        "enabled": true,
+        "server_name": "luo11.pages.dev",
+        "insecure": true,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        },
+        "ech": {
+          "enabled": true,
+          "query_server_name": "cloudflare-ech.com"
+        }
+      }
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "inbound": "tproxy-in",
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "rule_set": [
+          "geosite-category-ads-all",
+          "anti-AD"
+        ],
+        "action": "reject",
+        "method": "default"
+      },
+      {
+        "protocol": "stun",
+        "rule_set": [
+          "geoip-cn",
+          "geosite-cn"
+        ],
+        "action": "reject",
+        "method": "default"
+      },
+      {
+        "protocol": "ntp",
+        "outbound": "DIRECT"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "DIRECT"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "GLOBAL"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": "geosite-googlefcm",
+        "outbound": "🔥 FCM"
+      },
+      {
+        "rule_set": [
+          "geosite-private",
+          "google-cn",
+          "apple-cn",
+          "microsoft-cn"
+        ],
+        "domain_suffix": [
+          "nextdns.io"
+        ],
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": [
+          "geosite-telegram",
+          "telegramip"
+        ],
+        "outbound": "✈️ Telegram"
+      },
+      {
+        "rule_set": "geosite-github",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "rule_set": "geosite-twitter",
+        "outbound": "✖️ X-Twitter"
+      },
+      {
+        "rule_set": "geosite-google-gemini",
+        "outbound": "🤖 Gemini"
+      },
+      {
+        "rule_set": "geosite-spotify",
+        "outbound": "🎵 Spotify"
+      },
+      {
+        "rule_set": "geosite-youtube",
+        "outbound": "📺 YouTube"
+      },
+      {
+        "rule_set": "geosite-google",
+        "outbound": "✳️ Google"
+      },
+      {
+        "rule_set": "geosite-microsoft",
+        "outbound": "🪟 Microsoft"
+      },
+      {
+        "rule_set": "geosite-apple",
+        "outbound": "🍎 Apple"
+      },
+      {
+        "rule_set": "ai",
+        "outbound": "💡AI"
+      },
+      {
+        "rule_set": [
+          "tld-proxy",
+          "gfw",
+          "proxy",
+          "geosite-geolocation-!cn"
+        ],
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "ip_cidr": [
+          "198.18.0.0/15",
+          "fc00::/18"
+        ],
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "outbound": "DIRECT"
+      },
+      {
+        "rule_set": [
+          "geoip-cn"
+        ],
+        "outbound": "DIRECT"
+      },
+      {
+        "outbound": "🐟 漏网之鱼"
+      }
+    ],
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": "geosite-private",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/private.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "anti-AD",
+        "url": "https://anti-ad.net/anti-ad-sing-box.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "48h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "tld-proxy",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/tld-proxy.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "ai",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/ai.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "gfw",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/gfw.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "proxy",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/proxy.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "telegramip",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geoip/telegram.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-category-ads-all",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/category-ads-all.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        }
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-googlefcm",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/googlefcm.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-github",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/github.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-cn",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/cn.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-cn",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geoip/cn.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-geolocation-!cn",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/geolocation-!cn.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        }
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-apple",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/apple.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-telegram",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/telegram.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-youtube",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/youtube.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-spotify",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/spotify.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-microsoft",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/microsoft.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-google-gemini",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/google-gemini.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "google-cn",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/google-cn.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "microsoft-cn",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/microsoft-cn.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "apple-cn",
+        "url": "https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/apple-cn.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-twitter",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/twitter.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-google",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/google.srs",
+        "http_client": {
+          "detour": "🎯 全球直连"
+        },
+        "update_interval": "2d"
+      }
+    ],
+    "final": "🐟 漏网之鱼",
+    "auto_detect_interface": true,
+    "find_process": true,
+    "find_neighbor": true,
+    "default_network_strategy": "default",
+    "default_domain_resolver": {
+      "server": "dns_direct",
+      "strategy": "prefer_ipv4"
+    }
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": true,
+      "store_dns": true
+    },
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "./dashboard",
+      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
+      "external_ui_download_detour": "🚀 节点选择"
+    }
+  }
+}
